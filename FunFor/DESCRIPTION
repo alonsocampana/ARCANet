@@ -1,0 +1,11 @@
+Package: FunFor
+Title: Random Forest for Functional Data (FunFor)
+Version: 0.1.0
+Author: Xiaotian Dai
+Maintainer: Xiaotian Dai <xiaotian.dai.utah@gmail.com>
+Description: Build random forest models for function-on-scalar regressions.
+Depends: refund, caret, MASS
+License: What license is it under?
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+
