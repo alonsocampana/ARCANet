@@ -177,21 +177,10 @@ def train_model(trial, config, RUN, root = f"logs/GDSC1/"):
         val_5 = val_5.assign(var_obs = y_obs_5.var(axis=1).cpu().numpy(), var_pred = y_pred_5.var(axis=1).cpu().numpy())
         val_9 = val_9.assign(var_obs = y_obs_9.var(axis=1).cpu().numpy(), var_pred = y_pred_9.var(axis=1).cpu().numpy())
         val_df = pd.concat([val_5, val_9])
-        mean_corr = val_df.groupby("DRUG_ID")["var_obs", "var_pred"].corr().iloc[0::2,-1].mean()
-        trial.report(mean_corr, step = epoch)
+        trial.report(m_test["MeanSquaredError"], step = epoch)
         if trial.should_prune():
             raise optuna.TrialPruned()
-        best_kl = 1
-        if m_test["kl"] < best_kl:
-            best_kl = m_test["kl"]
-            state = model.state_dict()
-        if config["env"]["logging"]:
-            logger(epoch = epoch, train = m_train, test = m_test)
-        if (epoch + 1) % 100 == 0:              
-            torch.save({"state_best": state,
-                "state_last": model.state_dict(),
-                "optim": optimizer.state_dict()}, f"models/GDSC1_{RUN}.pt")
-    return mean_corr
+    return m_test["MeanSquaredError"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PyTorch MNIST Example")
@@ -245,7 +234,7 @@ if __name__ == "__main__":
     storage_name = "sqlite:///{}.db".format(study_name)
     study = optuna.create_study(study_name=study_name,
                                 storage=storage_name,
-                                direction='maximize',
+                                direction='minimize',
                                 load_if_exists=True,
                                 pruner=optuna.pruners.MedianPruner(n_startup_trials=2,
                                                                n_warmup_steps=10,
