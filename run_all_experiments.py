@@ -49,20 +49,8 @@ for logistic in ["2P", "3P", "4P"]:
         for setting in ["smoothing", "extrapolation", "interpolation"]:
             for fold in range(10):
                 tasks.append(f"python3 train_baseline_individual.py --dataset {dataset} --setting {setting} --fold {fold} --logistic {logistic} ")
-    for dataset in ["NCI60"]:
-        for setting in ["smoothing", "extrapolation", "interpolation"]:
-            for fold in range(10):
-                tasks.append(f"python3 train_baseline_individual.py --dataset {dataset} --setting {setting} --fold {fold} --logistic {logistic} ")
-    for dataset in ["NCI60"]:
-        for setting in ["smoothing", "extrapolation", "interpolation"]:
-            for fold in range(10):
-                tasks.append(f"python3 train_baseline_individual.py --dataset {dataset} --setting {setting} --fold {fold} --cuda 0 --logistic {logistic}")
 for dataset in ["GDSC2", "CTRPv2", "PRISM"]:
     for setting in ["precision_oncology"]:
-        for fold in range(10):
-            tasks.append(f"python3 train_funfor.py --dataset {dataset} --setting {setting} --fold {fold} ")
-for dataset in ["NCI60"]:
-    for setting in ["drug_discovery"]:
         for fold in range(10):
             tasks.append(f"python3 train_funfor.py --dataset {dataset} --setting {setting} --fold {fold} ")
 
@@ -70,6 +58,16 @@ for dataset in ["GDSC2", "CTRPv2", "PRISM", "NCI60"]:
     for setting in ["smoothing", "extrapolation", "interpolation"]:
         for fold in range(10):
             tasks.append(f"python3 train_baseline.py --dataset {dataset} --setting {setting} --fold {fold} --mixed_effect ")
+
+for bootstrap in range(10):
+    for dataset in ["NCI60"]:
+        for setting in ["drug_discovery"]:
+            for fold in range(1, 2):
+                tasks.append(f"python3 train_funfor.py --dataset {dataset} --setting {setting} --fold {fold} --random_suffix ")
+    for dataset in ["NCI60"]:
+            for setting in ["smoothing", "extrapolation", "interpolation"]:
+                for fold in range(1, 2):
+                    tasks.append(f"python3 train_baseline_individual.py --dataset {dataset} --setting {setting} --fold {fold} --logistic {logistic} --random_suffix ")
 
 
 ##########################################

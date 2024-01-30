@@ -19,6 +19,7 @@ import argparse
 import uuid
 from sklearn.metrics import mean_squared_error
 from scipy.stats import pearsonr
+import uuid
 
 
 
@@ -39,7 +40,8 @@ def train_funfor(config):
     y_pred = pd.read_csv(f"temp/temp_{code}_ypred.csv", index_col=0).iloc[1:].to_numpy().squeeze()
     r = pearsonr(y_pred.flatten(), y_test.flatten())[0]
     m = mean_squared_error(y_pred.flatten(), y_test.flatten())
-    pd.Series({"MeanSquaredError_test" :m, "PearsonCorrCoef_test" :r}).to_csv(f"results_baseline/FunFor_{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}.csv")
+    suffix = f"{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}{config['env']['random_suffix']}"
+    pd.Series({"MeanSquaredError_test" :m, "PearsonCorrCoef_test" :r}).to_csv(f"results_baseline/FunFor_{suffix}.csv")
     os.remove(f"temp/temp_{code}_Xtrain.csv")
     os.remove(f"temp/temp_{code}_Xtest.csv")
     os.remove(f"temp/temp_{code}_ytrain.csv")
@@ -71,10 +73,12 @@ if __name__ == "__main__":
     )
     
     parser.add_argument(
-        "--mixed_effect",
+        "--random_suffix",
         action = "store_true",
         help="Uses the mixed_effect model"
     )
+    
+    
     
     args= parser.parse_args()
     dataset = args.dataset
@@ -84,5 +88,7 @@ if __name__ == "__main__":
     config["env"]["fold"] = fold
     config["env"]["dataset"] = dataset
     config["env"]["setting"] = setting
-    config["env"]["mixed_effect"] = args.mixed_effect
+    config["env"]["random_suffix"] = ""
+    if args.random_suffix:
+        config["env"]["random_suffix"] = "_" + str(uuid.uuid4())
     train_funfor(config)

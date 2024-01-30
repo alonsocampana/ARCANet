@@ -19,6 +19,7 @@ import argparse
 import uuid
 from sklearn.metrics import mean_squared_error
 from scipy.stats import pearsonr
+import uuid
 
 def as_mapped_dict(arry):
     max_ar = arry.max()
@@ -73,16 +74,17 @@ def train_baseline(config):
         print(pred_df.columns)
         y_pred = pred_df.loc[:, "prediction"].to_numpy()
         y_obs = test_data.loc[:, "y"].to_numpy()
-        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/2P_{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}.csv")
+        suffix = f"{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}{config['env']['random_suffix']}"
+        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/2P_{suffix}.csv")
         y_pred = pred_df.loc[:, "prediction.1"].to_numpy()
         y_obs = test_data.loc[:, "y"].to_numpy()
-        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/3P_{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}.csv")
+        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/3P_{suffix}.csv")
         y_pred = pred_df.loc[:, "prediction.2"].to_numpy()
         y_obs = test_data.loc[:, "y"].to_numpy()
-        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/4P_{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}.csv")
+        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/4P_{suffix}.csv")
         y_pred = pred_df.loc[:, "prediction.3"].to_numpy()
         y_obs = test_data.loc[:, "y"].to_numpy()
-        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/5P_{config['env']['dataset']}_{config['env']['setting']}_{config['env']['fold']}.csv")
+        pd.Series({"MeanSquaredError_test" : mean_squared_error(y_obs, y_pred), "PearsonCorrCoef_test" : pearsonr(y_obs, y_pred)[0]}).to_csv(f"results_baseline/5P_{suffix}.csv")
         
     
     
@@ -116,6 +118,12 @@ if __name__ == "__main__":
         help="Uses the mixed_effect model"
     )
     
+    parser.add_argument(
+        "--random_suffix",
+        action = "store_true",
+        help="Uses the mixed_effect model"
+    )
+    
     args= parser.parse_args()
     dataset = args.dataset
     fold = args.fold
@@ -125,4 +133,7 @@ if __name__ == "__main__":
     config["env"]["dataset"] = dataset
     config["env"]["setting"] = setting
     config["env"]["mixed_effect"] = args.mixed_effect
+    config["env"]["random_suffix"] = ""
+    if args.random_suffix:
+        config["env"]["random_suffix"] = "_" + str(uuid.uuid4())
     train_baseline(config)
