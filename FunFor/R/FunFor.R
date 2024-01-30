@@ -224,7 +224,7 @@ make_split = function(data, node, Xs, Ys, MVT, ancestor, depth, pred_list, npc, 
         pos = which(phis == max_phi, arr.ind = TRUE)
         split[[i]] = index[[pos[1]]][, pos[2]]
       } else {
-        cuts = seq(min(X[, i]), max(X[, i]), (max(X[, i]) - min(X[, i])) / 10)
+        cuts = seq(min(X[, i],  na.rm=TRUE), max(X[, i],  na.rm=TRUE), (max(X[, i],  na.rm=TRUE) - min(X[, i],  na.rm=TRUE)) / 10)
         cuts = cuts[-c(1, 11)]
         phis = rep(0, 9)
         for (j in 1:9) {

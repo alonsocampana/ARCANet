@@ -1,6 +1,0 @@
-train = read.csv("R/temp_train.csv")
-test = read.csv("R/temp_test.csv")
-source("R/GDSCic50.R")
-mod = fitModel(train)
-pred = predict(mod, test)
-write.csv(data.frame(pred), "R/preds.csv", row.names=FALSE)
