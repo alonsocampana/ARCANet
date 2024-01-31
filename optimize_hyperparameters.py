@@ -47,7 +47,7 @@ def train_model_optuna(trial, config):
                 "activation_fn": trial.suggest_categorical("activation_fn", ["relu", "sigmoid", "tanh"]),
                 "fusion" :"hill",
                 "transform_log_conc": trial.suggest_categorical("transform_log_conc", [True, False]),
-                "crossattn" : trial.suggest_categorical("crossattn", ["gated", "transformer"])}
+                "crossattn" : "transformer"}
     config["optimizer"] = {"batch_size":256,
                       "learning_rate":trial.suggest_float("learning_rate", 0.00000001, 0.1, log=True),
                       "gamma_factor":0.5,
