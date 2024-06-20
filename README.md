@@ -1,4 +1,4 @@
-Implementation of the paper - Predicting Dose-Response Curves with Deep Neural Networks, published at ICML 2024. 
+Implementation of the paper - Predicting Dose-Response Curves with Deep Neural Networks, published at [ICML 2024](https://icml.cc/virtual/2024/poster/34250). 
 - `run_all_experiments.py` contains driver code for executing the experiments. 
 - `train_model.py` contains the training loop for the model
 - `optimize_hyperparameters.py` contains the hyperparameter optimization pipeline.
