@@ -6,7 +6,7 @@ import urllib.request
 import zipfile
 from os.path import exists
 
-def download_file(url, filename, root_folder = "/mnt/scratch/alonsocampana/data/"):
+def download_file(url, filename, root_folder = "./data/"):
     urllib.request.urlretrieve(url, root_folder+filename)
     
 def download_or_read(url, filename, root):
@@ -390,7 +390,7 @@ class GraphCreator():
         return suffix
 
 class GDSC():
-    def __init__(self, root = "/mnt/scratch/alonsocampana/data/",
+    def __init__(self, root = "./",
                  dataset = "GDSC1",
                  cell_lines = "expression",
                  gene_subset = None,
@@ -470,7 +470,7 @@ class GDSC():
         return f"{self.dataset}_raw"
 class NCI60():
     def __init__(self, ):
-        root = "/mnt/mlshare/alonsocampana/data/"
+        root = "./data/"
         self.root = root
         if not os.path.isdir(root):
             os.mkdir(root)
@@ -518,7 +518,7 @@ class NCI60():
 
 class PRISM():
     def __init__(self):
-        root = "/mnt/scratch/alonsocampana/data/PRISM/"
+        root = "./data/PRISM/"
         self.root = root
         if not os.path.isdir(root):
             os.mkdir(root)
@@ -559,7 +559,7 @@ class PRISM():
         return f"PRISM_raw"
         
 class CTRPv2():
-    def __init__(self, root = "/mnt/scratch/alonsocampana/data/"):
+    def __init__(self, root = "./data/"):
         url = "https://ctd2-data.nci.nih.gov/Public/Broad/CTRPv2.0_2015_ctd2_ExpandedDataset/CTRPv2.0_2015_ctd2_ExpandedDataset.zip"
         filename = "CTRPv2.0_2015_ctd2_ExpandedDataset.zip"
         self.root = root
