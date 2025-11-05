@@ -776,13 +776,13 @@ def process_dataset(dataset, CUTOFF = None, add_fingerprint = True):
     cells = filtered_data.loc[:, "cell"].unique()
     filtered_drugs = dataset.drugs.query("drug in @drugs")
     filtered_expression = dataset.expression.query("cell in @cells")
-    graph_file = f"{dataset.root}/{str(dataset)}_graphs.pt"
+    graph_file = f"{dataset.root}/data/{str(dataset)}_graphs.pt"
     if not os.path.exists(graph_file):
         graphs = GraphCreator(use_supernode = True)(filtered_drugs.loc[:, "smiles"].to_numpy(), filtered_drugs.loc[:, "drug"].to_numpy())
         torch.save(graphs, graph_file)
     graphs = torch.load(graph_file)
     if add_fingerprint:
-        fp_file = f"{dataset.root}/{str(dataset)}_fp.pt"
+        fp_file = f"{dataset.root}/data/{str(dataset)}_fp.pt"
         if not os.path.exists(fp_file):
             fp = FingerprintFeaturizer()
             drugs_in_g = np.array(list(graphs.keys()))
@@ -795,7 +795,7 @@ def process_dataset(dataset, CUTOFF = None, add_fingerprint = True):
                 graphs[dr_n]["fingerprint"] = fps[dr_n].unsqueeze(0)
             except:
                 pass
-    exp_file = f"{dataset.root}/{str(dataset)}_exp.pt"
+    exp_file = f"{dataset.root}/data/{str(dataset)}_exp.pt"
     if not os.path.exists(exp_file) & False:
         paccmann_list = pd.read_csv("https://raw.githubusercontent.com/prassepaul/mlmed_ranking/main/data/gdsc_data/paccmann_gene_list.txt", header=None).to_numpy().squeeze()
         exp = ExpCreator()(filtered_expression, paccmann_list)
